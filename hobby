@@ -1,0 +1,139 @@
+import zipfile
+import os
+
+# Create folders and file paths
+base_path = "/mnt/data/photography_website"
+os.makedirs(base_path + "/images", exist_ok=True)
+os.makedirs(base_path + "/audio", exist_ok=True)
+os.makedirs(base_path + "/video", exist_ok=True)
+
+# Create index.html
+index_html = """<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Моє хобі — Фотографія</title>
+  <style>
+    body {
+      background-color: #f0f8ff;
+      font-family: Arial, sans-serif;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>Моє хобі — фотографія</h1>
+  <p>Я обожнюю фотографувати природу, людей та події. Це допомагає мені бачити красу у звичайних речах.</p>
+
+  <h2>Про моє хобі</h2>
+  <p>Фотографією я захоплююсь з дитинства. Мені подобається знімати світанки, тварин та моменти життя.</p>
+
+  <h2>Моя улюблена музика під час обробки фото</h2>
+  <audio controls>
+    <source src="audio/music.mp3" type="audio/mpeg">
+    Ваш браузер не підтримує аудіо.
+  </audio>
+
+  <h2>Моє відео з поїздки</h2>
+  <video width="320" height="240" controls>
+    <source src="video/trip.mp4" type="video/mp4">
+    Ваш браузер не підтримує відео.
+  </video>
+
+  <h2>Контактна форма</h2>
+  <form>
+    Ім'я: <input type="text" name="name"><br><br>
+    Email: <input type="email" name="email"><br><br>
+    Повідомлення:<br>
+    <textarea rows="4" cols="40"></textarea><br><br>
+    <input type="submit" value="Надіслати">
+  </form>
+
+  <p><a href="gallery.html">Перейти до галереї</a></p>
+
+  <footer>
+    Розробник: Андрій Прізвище
+  </footer>
+</body>
+</html>
+"""
+with open(f"{base_path}/index.html", "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+# Create gallery.html
+gallery_html = """<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Галерея</title>
+  <style>
+    body {
+      background-color: #fffaf0;
+      font-family: Arial, sans-serif;
+    }
+    table, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 10px;
+    }
+    img {
+      width: 200px;
+    }
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>Галерея фотографій</h1>
+
+  <table>
+    <tr>
+      <td><img src="images/photo1.jpg" alt="Фото 1"></td>
+      <td><img src="images/photo2.jpg" alt="Фото 2"></td>
+    </tr>
+    <tr>
+      <td><img src="images/photo3.jpg" alt="Фото 3"></td>
+      <td><img src="images/photo4.jpg" alt="Фото 4"></td>
+    </tr>
+  </table>
+
+  <p><a href="index.html">На головну</a></p>
+
+  <footer>
+    Розробник: Андрій Прізвище
+  </footer>
+</body>
+</html>
+"""
+with open(f"{base_path}/gallery.html", "w", encoding="utf-8") as f:
+    f.write(gallery_html)
+
+# Create placeholder image, audio, and video files
+for i in range(1, 5):
+    with open(f"{base_path}/images/photo{i}.jpg", "wb") as f:
+        f.write(b"placeholder image content")
+
+with open(f"{base_path}/audio/music.mp3", "wb") as f:
+    f.write(b"placeholder audio content")
+
+with open(f"{base_path}/video/trip.mp4", "wb") as f:
+    f.write(b"placeholder video content")
+
+# Zip the folder
+zip_path = "/mnt/data/photography_website.zip"
+with zipfile.ZipFile(zip_path, 'w') as zipf:
+    for foldername, subfolders, filenames in os.walk(base_path):
+        for filename in filenames:
+            filepath = os.path.join(foldername, filename)
+            zipf.write(filepath, arcname=os.path.relpath(filepath, base_path))
+
+zip_path
